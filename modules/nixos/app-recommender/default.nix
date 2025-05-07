@@ -45,6 +45,18 @@ in
         #!/usr/bin/env bash
         exec ${pkgs.python3}/bin/python3 ${../app-recommender/recommender_gui.py} "$@"
       '')
+
+            # Add desktop file to system menu
+      (pkgs.makeDesktopItem {
+        name = "nixapp-recommender";
+        desktopName = "NixOS App Recommender";
+        comment = "AI-powered application recommendation engine for NixOS";
+        exec = "nixapp-recommender";
+        icon = "system-software-install";
+        terminal = false;
+        categories = [ "System" "Settings" ];
+        genericName = "Application Recommender";
+      })
     ];
     
     # Create the data directory
@@ -89,17 +101,6 @@ in
     };
     
     # Add desktop file to system menu
-    environment.systemPackages = [
-      (pkgs.makeDesktopItem {
-        name = "nixapp-recommender";
-        desktopName = "NixOS App Recommender";
-        comment = "AI-powered application recommendation engine for NixOS";
-        exec = "nixapp-recommender";
-        icon = "system-software-install";
-        terminal = false;
-        categories = [ "System" "Settings" ];
-        genericName = "Application Recommender";
-      })
-    ];
+
   };
 }
