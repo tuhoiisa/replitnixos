@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+# NixOS App Recommender launcher script
+
+# Source directory for the recommender
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+
+# Check if running as root and switch to user if needed
+if [ "$EUID" -eq 0 ]; then
+  # When run as root, restart as the user running the X session
+  XUSER=$(who | grep -m1 "(:0)" | cut -d ' ' -f1)
+  if [ -n "$XUSER" ]; then
+    exec sudo -u "$XUSER" "$0" "$@"
+  else
+    echo "Cannot determine X user, please run this as a normal user"
+    exit 1
+  fi
+fi
+
+# Create the database directory if it doesn't exist
+DB_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/app-recommender"
+mkdir -p "$DB_DIR"
+
+# Set environment variables
+export APP_RECOMMENDER_DB="$DB_DIR/database.db"
+export PYTHONPATH="$SCRIPT_DIR:$PYTHONPATH"
+
+# Run the GUI
+exec python3 "$SCRIPT_DIR/recommender_gui.py" "$@"

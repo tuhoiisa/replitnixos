@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=NixOS App Recommender
+Comment=AI-powered application recommendation engine for NixOS
+Exec=nixapp-recommender
+Icon=system-software-install
+Terminal=false
+Type=Application
+Categories=System;Settings;
+Keywords=apps;software;recommend;packages;
